@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROPII.CO — Guía de llamada en frío</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#FAFAF8;--bg2:#F2F1ED;--bg3:#E8E7E3;
+--text:#1A1A18;--text2:#5C5B57;--text3:#8A8985;
+--border:#D8D7D3;--border2:#C4C3BF;
+--accent:#2D5A27;--accent-light:#E8F0E7;--accent-mid:#4A8B42;
+--danger:#9B2C2C;--danger-light:#FDE8E8;
+--warning:#8B6914;--warning-light:#FEF3CD;
+--info:#1E5A8A;--info-light:#E1F0FA;
+--purple:#5B3E96;--purple-light:#F0ECF7;
+--radius:10px;--radius-lg:14px;
+--font:'DM Sans',system-ui,-apple-system,sans-serif;
+--mono:'DM Mono',monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.header{background:var(--accent);color:#fff;padding:1.5rem 1.25rem;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+.header p{font-size:.8rem;opacity:.75;margin-top:2px}
+
+.step-bar{display:flex;gap:6px;padding:12px 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:68px;z-index:99;-webkit-overflow-scrolling:touch}
+.step-bar::-webkit-scrollbar{display:none}
+.step-pill{padding:7px 14px;border-radius:20px;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--bg);color:var(--text2);transition:all .2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.step-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.step-pill.done{background:var(--accent-light);color:var(--accent);border-color:var(--accent-mid)}
+
+.container{max-width:640px;margin:0 auto;padding:1rem 1.25rem 6rem}
+
+.phase{display:none;animation:fadeIn .25s ease}
+.phase.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.phase-header{margin:0 0 1.25rem}
+.phase-num{font-family:var(--mono);font-size:.7rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.phase-title{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.phase-desc{font-size:.85rem;color:var(--text2);margin-top:4px}
+.phase-time{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--bg2);color:var(--text3);margin-top:8px}
+.phase-time svg{width:13px;height:13px}
+
+.script-block{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.15rem;margin:0 0 12px}
+.script-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:8px}
+.script-text{font-size:.95rem;line-height:1.7;color:var(--text)}
+.script-text .var{color:var(--accent);font-weight:600}
+.script-text em{font-style:italic;color:var(--text2)}
+
+.branch-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:16px 0 8px}
+.branches{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.branch-opt{padding:8px 14px;border-radius:var(--radius);font-size:.8rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text);transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent}
+.branch-opt:hover{border-color:var(--border2);background:var(--bg2)}
+.branch-opt.sel{background:var(--accent-light);border-color:var(--accent-mid);color:var(--accent)}
+.branch-opt.g{border-color:#A3D9A0;color:#2D5A27}
+.branch-opt.r{border-color:#F5A3A3;color:#9B2C2C}
+.branch-opt.y{border-color:#F5D679;color:#8B6914}
+
+.response{display:none;background:#fff;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:1rem 1.1rem;margin:8px 0}
+.response.show{display:block;animation:fadeIn .2s ease}
+.response h4{font-size:.85rem;font-weight:700;margin-bottom:6px}
+.response p{font-size:.85rem;line-height:1.7;color:var(--text2)}
+.response p em{color:var(--text);font-style:italic}
+
+.tip-box{display:flex;gap:10px;align-items:flex-start;margin:14px 0;padding:12px 14px;border-radius:var(--radius);background:var(--accent-light);font-size:.78rem;color:var(--accent);line-height:1.55}
+.tip-box svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+
+.obj-section{margin:8px 0}
+.obj-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin:0 0 8px;overflow:hidden;transition:border-color .15s}
+.obj-card.open{border-color:var(--border2)}
+.obj-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:10px;user-select:none;-webkit-tap-highlight-color:transparent}
+.obj-quote{font-size:.85rem;font-weight:600;flex:1;line-height:1.3}
+.obj-tag{font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.obj-tag.des{background:var(--danger-light);color:var(--danger)}
+.obj-tag.com{background:var(--info-light);color:var(--info)}
+.obj-tag.aut{background:var(--warning-light);color:var(--warning)}
+.obj-tag.eva{background:var(--purple-light);color:var(--purple)}
+.obj-chevron{width:18px;height:18px;transition:transform .2s;color:var(--text3);flex-shrink:0}
+.obj-card.open .obj-chevron{transform:rotate(180deg)}
+.obj-body{display:none;padding:0 14px 14px;font-size:.82rem;line-height:1.7;color:var(--text2)}
+.obj-card.open .obj-body{display:block}
+.obj-body em{color:var(--text);font-style:italic}
+.obj-body strong{font-weight:600;color:var(--text);display:block;margin-bottom:6px}
+
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 1.25rem;display:flex;gap:10px;z-index:100}
+.nav-btn{flex:1;padding:12px;border-radius:var(--radius);font-size:.85rem;font-weight:600;cursor:pointer;text-align:center;border:none;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.nav-btn.prev{background:var(--bg2);color:var(--text2)}
+.nav-btn.next{background:var(--accent);color:#fff}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn:active:not(:disabled){transform:scale(.97)}
+
+@media(max-width:500px){
+.header{padding:1.1rem 1rem}
+.step-bar{padding:10px 1rem}
+.container{padding:.85rem 1rem 5.5rem}
+.script-block{padding:.9rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>PROPII.CO — Guía de llamada en frío</h1>
+<p>Árbol de respuestas para captación de inmuebles en arriendo</p>
+</div>
+
+<div class="step-bar" id="stepBar"></div>
+
+<div class="container" id="content"></div>
+
+<div class="nav-bottom">
+<button class="nav-btn prev" id="prevBtn" onclick="navigate(-1)">← Anterior</button>
+<button class="nav-btn next" id="nextBtn" onclick="navigate(1)">Siguiente →</button>
+</div>
+
+<script>
+const SVG={
+clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>',
+chev:'<svg class="obj-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>'
+};
+
+const phases=[
+{
+id:'apertura',title:'Apertura',time:'15 seg',
+desc:'Ganar el permiso para hablar. Sin esto, nada funciona.',
+blocks:[
+{type:'script',label:'Guion de apertura',text:'"Buenos días/tardes, ¿hablo con <span class="var">[nombre]</span>? Mi nombre es <span class="var">[tu nombre]</span>, lo llamo de PROPII.CO. Vi su inmueble publicado en <span class="var">[portal]</span>, el que está en <span class="var">[zona/dirección]</span>. ¿Me regala un minutico?"'},
+{type:'branches',label:'¿Qué responde el propietario?',options:[
+{text:'✓ Sí, dígame',cls:'g',resp:{title:'Avanza al enganche',body:'Perfecto. Pasa inmediatamente a la siguiente fase. No pierdas impulso agradeciendo demasiado. El momentum es todo.'}},
+{text:'⏱ Estoy ocupado',cls:'y',resp:{title:'Anclar recontacto con hora específica',body:'<em>"Entiendo perfectamente, no quiero quitarle tiempo. ¿Le queda mejor que lo llame hoy a las 5 o mañana en la mañana?"</em><br><br>Nunca dejes abierto "llámeme después". Siempre ancla día y hora. Registra en tu base de datos y cumple puntualmente.'}},
+{text:'✕ No me interesa',cls:'r',resp:{title:'Microconcesión de 30 segundos',body:'<em>"Entiendo, y precisamente por eso lo llamo. No soy de las inmobiliarias de siempre. Solo quiero contarle algo rápido sobre su inmueble. ¿Me regala 30 segundos? Si no le interesa, cuelgo yo mismo."</em><br><br>Si sigue diciendo que no: <em>"Perfecto, le agradezco su tiempo. Que tenga buen día."</em> Descarta sin insistir más.'}},
+{text:'👤 No soy el dueño',cls:'y',resp:{title:'Conseguir datos del propietario real',body:'<em>"Entiendo. ¿Usted sabe quién es el propietario o me podría compartir un teléfono para contactarlo? Me gustaría ofrecerle un servicio que le puede interesar."</em><br><br>Si te dan el dato, regístralo como nuevo lead. Si no, agradece y cierra.'}}
+]},
+{type:'tip',text:'Mencionar el portal y la zona demuestra que no es una llamada genérica. El propietario siente que sabes exactamente de qué inmueble estás hablando. Eso sube la tasa de respuesta.'}
+]},
+{
+id:'enganche',title:'Enganche',time:'15 seg',
+desc:'Activar el dolor del propietario con una sola pregunta.',
+blocks:[
+{type:'script',label:'Pregunta de enganche',text:'"¿Hace cuánto tiene publicado el inmueble?"'},
+{type:'branches',label:'Según el tiempo publicado',options:[
+{text:'Poco tiempo (<2 sem)',cls:'g',resp:{title:'Está empezando — enfócate en prevenir',body:'<em>"Bien, está arrancando. ¿Ya ha recibido muchas llamadas? Le pregunto porque lo que viene ahora es lo más desgastante: filtrar curiosos, hacer estudios, revisar documentos... ¿Usted tiene tiempo para encargarse de todo eso?"</em><br><br>La clave es plantar la semilla de lo que viene. Si apenas publicó, todavía no sufrió. Tú le anticipas el dolor.'}},
+{text:'Más de 1 mes',cls:'y',resp:{title:'Ya tiene dolor — valídalo y amplifícalo',body:'<em>"Un mes es bastante tiempo. ¿Ha recibido muchas llamadas de curiosos que no terminan en nada? Eso es lo más desgastante: invertir tiempo mostrando el inmueble a gente que después no califica o simplemente desaparece."</em><br><br>Aquí el propietario ya está frustrado. No necesitas inventar el dolor, solo hacerlo visible.'}},
+{text:'No sabe / no responde',cls:'r',resp:{title:'Redirige al dolor universal',body:'<em>"Le pregunto porque muchos propietarios nos cuentan que lo más agotador no es arrendar, sino todo lo que viene después: cobrar, mantener, resolver problemas con el arrendatario... ¿Le ha pasado algo así?"</em><br><br>Funciona como puente hacia el sondeo sin forzar la conversación.'}}
+]},
+{type:'tip',text:'Esta pregunta tiene doble propósito: te da información valiosa sobre el lead Y abre la puerta para hablar de soluciones. Si lleva mucho tiempo publicado, tu poder de negociación sube porque el propietario ya está cansado.'}
+]},
+{
+id:'sondeo',title:'Sondeo',time:'30 seg',
+desc:'Entender la situación real del propietario para adaptar tu pitch.',
+blocks:[
+{type:'script',label:'Pregunta 1 — Experiencia',text:'"¿Usted mismo se encargaría de administrar todo: cobros, reparaciones, temas legales?"'},
+{type:'script',label:'Pregunta 2 — Historia',text:'"¿Ha tenido alguna experiencia complicada con un arrendatario antes?"'},
+{type:'branches',label:'¿Qué perfil descubres?',options:[
+{text:'Primera vez arrendando',cls:'g',resp:{title:'Enfoque: proteger al novato',body:'Este propietario no sabe lo que no sabe. Tu pitch se enfoca en prevención.<br><br><em>"Arrendar sin respaldo es como manejar sin seguro. Puede que no pase nada, pero si pasa, el golpe es durísimo. Nosotros le blindamos todo: estudio del arrendatario, contrato, póliza, y administración completa."</em>'}},
+{text:'Ya tiene experiencia',cls:'y',resp:{title:'Enfoque: liberar tiempo',body:'Sabe hacerlo pero le quita tiempo. Tu pitch va por delegación.<br><br><em>"Usted ya sabe cómo funciona esto. La pregunta es: ¿quiere seguir dedicándole horas a cobrar, a perseguir reparaciones, a resolver problemas? ¿O prefiere que alguien lo haga por usted y solo recibir su plata?"</em>'}},
+{text:'Tuvo mala experiencia',cls:'r',resp:{title:'Enfoque: nunca más',body:'Este es tu mejor prospecto. Ya sufrió. Tu pitch es emocional.<br><br><em>"Entiendo perfectamente. Muchos de nuestros clientes llegaron exactamente por eso: un arrendatario que dejó de pagar, que dañó el inmueble, que se convirtió en un problema legal. Nosotros existimos para que eso no le vuelva a pasar."</em>'}},
+{text:'Momento personal difícil',cls:'y',resp:{title:'Enfoque: acompañamiento humano',body:'Aquí PROPII.CO brilla diferente. Baja el tono comercial y sube el tono humano.<br><br><em>"Muchas veces nos toca acompañar a propietarios que están pasando por un momento difícil — un divorcio, la pérdida de alguien, una mudanza — y lo último que necesitan es preocuparse por un arriendo. Nosotros nos encargamos de todo para que usted pueda enfocarse en lo que realmente importa."</em>'}}
+]},
+{type:'tip',text:'El sondeo define qué versión del pitch usas. No existe un pitch único. Escucha primero, adapta después. Si descubres una situación personal difícil, baja el tono comercial completamente. Máximo 2 preguntas — no es un interrogatorio.'}
+]},
+{
+id:'pitch',title:'Pitch',time:'45 seg',
+desc:'Presentar PROPII.CO como la solución a lo que el propietario acaba de contarte.',
+blocks:[
+{type:'script',label:'Pitch base (adapta según el sondeo)',text:'"<span class="var">[Nombre]</span>, en PROPII.CO lo que hacemos es encargarnos de todo el proceso de arriendo de su inmueble. Desde conseguir un arrendatario con perfil financiero validado — cero curiosos, cero paseos — hasta manejar contrato, póliza de seguro, cobros mensuales y reparaciones. Usted literalmente solo recibe su plata cada mes y nosotros trabajamos."'},
+{type:'divider'},
+{type:'script',label:'Si pregunta por el costo (solo si pregunta)',text:'"Nuestro servicio es el 10% mensual del canon de arrendamiento. Con eso usted tiene todo cubierto: la promoción, el estudio del arrendatario, el contrato, la póliza y la administración completa durante un año. Después de ese año, si quiere seguir con nosotros puede, y si prefiere manejarlo usted, perfecto."'},
+{type:'tip',text:'El 10% NO se menciona si no lo preguntan. Primero se vende el valor, después el precio. Si el propietario siente que el servicio vale más que el costo, el precio nunca es problema. Si preguntan, responde con naturalidad y ancla inmediatamente al beneficio.'},
+{type:'divider'},
+{type:'branches',label:'Frases de refuerzo según perfil',options:[
+{text:'Novato',cls:'g',resp:{title:'Refuerzo para propietario novato',body:'<em>"Es como tener un equipo completo trabajando por su inmueble. Usted no tiene que aprender a hacer contratos ni a perseguir pagos. Nosotros ya tenemos eso resuelto."</em>'}},
+{text:'Experimentado',cls:'y',resp:{title:'Refuerzo para propietario experimentado',body:'<em>"Usted ya sabe que esto toma tiempo. Haga la cuenta: las horas que invierte cobrando, resolviendo, mostrando el inmueble... ¿cuánto vale ese tiempo? Con nosotros, ese tiempo es suyo."</em>'}},
+{text:'Golpeado',cls:'r',resp:{title:'Refuerzo para propietario golpeado',body:'<em>"Con nosotros eso no vuelve a pasar. Cada arrendatario pasa por un estudio financiero riguroso, el contrato tiene blindaje jurídico y hay póliza de seguro. Si algo sale mal, nosotros respondemos."</em>'}},
+{text:'Momento difícil',cls:'y',resp:{title:'Refuerzo para momento difícil',body:'<em>"Nosotros entendemos que a veces la vida no da para estar pensando en arriendos. Hemos acompañado a personas en situaciones similares y lo que hacemos es quitarle esa carga de encima. Usted se enfoca en lo suyo, nosotros nos encargamos de todo."</em>'}}
+]}
+]},
+{
+id:'objeciones',title:'Objeciones',time:'Variable',
+desc:'Manejo de cada resistencia con técnica específica. Toca la que te están diciendo.',
+blocks:[
+{type:'objections',items:[
+{quote:'"No quiero con inmobiliarias"',tag:'Desconfianza',tagCls:'des',
+body:'<strong>Técnica: Validar + diferenciar</strong><em>"Tiene toda la razón en ser cauteloso. La mayoría de inmobiliarias funcionan como intermediarios que cobran y desaparecen. Nosotros somos diferentes: administramos su inmueble como si fuera nuestro. Tenemos póliza, respaldo jurídico y usted tiene una persona asignada que le responde siempre. ¿Me da la oportunidad de mostrarle cómo trabajamos? Sin compromiso."</em>'},
+{quote:'"Las inmobiliarias son unas ladronas"',tag:'Desconfianza',tagCls:'des',
+body:'<strong>Técnica: Validar emoción + transparencia</strong><em>"Entiendo por qué dice eso, y lamentablemente hay razones para pensarlo. Por eso nosotros trabajamos diferente: todo es digital y transparente, usted ve cada movimiento de su inmueble. Muchos de nuestros mejores clientes llegaron pensando exactamente lo mismo que usted, y hoy llevan más de un año con nosotros. ¿Le gustaría conocer cómo funciona?"</em>'},
+{quote:'"Me entregan el apartamento vuelto nada"',tag:'Desconfianza',tagCls:'des',
+body:'<strong>Técnica: Mostrar protección concreta</strong><em>"Eso es justo lo que evitamos. Hacemos un inventario fotográfico detallado al inicio, el contrato incluye cláusulas de responsabilidad del arrendatario, y hay póliza que cubre daños. Si el arrendatario entrega mal, la póliza responde. Su patrimonio está protegido."</em>'},
+{quote:'"Ustedes manejan mi plata"',tag:'Desconfianza',tagCls:'des',
+body:'<strong>Técnica: Transparencia + proceso claro</strong><em>"Entiendo la preocupación. Le cuento cómo funciona: el arrendatario paga, nosotros le transferimos a usted dentro de los primeros 5 días del mes, descontando solo el 10% del servicio. Todo queda registrado digitalmente. Usted siempre sabe cuánto entró y cuánto sale."</em>'},
+{quote:'"No lo dejo en exclusiva"',tag:'Competencia',tagCls:'com',
+body:'<strong>Técnica: Explicar por qué la exclusiva lo beneficia</strong><em>"Entiendo. Le explico por qué trabajamos en exclusiva: cuando su inmueble está con cinco inmobiliarias, ninguna invierte de verdad en promocionarlo porque sabe que otra puede cerrar primero. Con nosotros, invertimos en fotos profesionales, publicación en todos los portales, y estudio serio de arrendatarios porque sabemos que ese esfuerzo da resultado. La exclusiva es para que usted reciba un servicio de verdad, no un aviso más."</em>'},
+{quote:'"Ya tengo inmobiliaria"',tag:'Competencia',tagCls:'com',
+body:'<strong>Técnica: Pregunta reveladora</strong><em>"Perfecto. ¿Y cómo le ha ido? ¿Hace cuánto lo tiene con ellos?"</em><br><br>Si lleva tiempo sin resultado: <em>"Si lleva más de un mes y no se ha arrendado, algo no está funcionando. ¿No cree que vale la pena explorar otra opción?"</em><br><br>Si le va bien: <em>"Me alegra. Si en algún momento necesita una segunda opinión o quiere comparar servicios, quedo a la orden."</em> No insistas — cierra amablemente.'},
+{quote:'"Hay varias inmobiliarias arrendándolo"',tag:'Competencia',tagCls:'com',
+body:'<strong>Técnica: Convertir debilidad en argumento</strong><em>"Ese es justamente el problema. Cuando hay muchas manos, ninguna se responsabiliza de verdad. Si algo sale mal con el arrendatario, ¿quién responde? ¿La inmobiliaria A o la B? Con nosotros tiene un solo responsable de principio a fin, con póliza y respaldo jurídico."</em>'},
+{quote:'"Yo lo puedo hacer solo"',tag:'Autosuficiencia',tagCls:'aut',
+body:'<strong>Técnica: Preguntas de costo oculto</strong><em>"Claro que puede, y seguro lo hace bien. Pero déjeme hacerle unas preguntas rápidas: ¿cuántas llamadas de curiosos atiende al mes? ¿Quién le hace el estudio financiero al arrendatario? Si el inquilino deja de pagar en el mes tres, ¿usted tiene abogado y póliza para responder?</em><br><br><em>Todo eso tiene un costo en tiempo y riesgo. Nosotros lo asumimos por el 10% del canon."</em>'},
+{quote:'"Yo ya lo hago con seguro"',tag:'Autosuficiencia',tagCls:'aut',
+body:'<strong>Técnica: Ampliar el alcance</strong><em>"El seguro de arrendamiento cubre el canon cuando no pagan. Eso está bien. Pero ¿quién le consigue el arrendatario? ¿Quién hace el contrato? ¿Quién coordina las reparaciones? ¿Quién cobra cada mes? El seguro cubre una parte, nosotros cubrimos todo."</em>'},
+{quote:'"No quiero pagar comisión"',tag:'Autosuficiencia',tagCls:'aut',
+body:'<strong>Técnica: Reencuadrar el costo</strong><em>"Entiendo. Hagamos una cuenta rápida: si su canon es de un millón, el 10% son cien mil pesos. Por esa plata usted tiene un equipo que le consigue arrendatario, le cobra, le hace mantenimiento, le resuelve problemas legales y le protege con póliza. ¿Cuánto le costaría hacer todo eso solo? ¿Cuánto vale su tiempo?"</em><br><br>Siempre lleva la objeción del precio al terreno del valor y del tiempo.'},
+{quote:'"Llámeme que estoy ocupado"',tag:'Evasión',tagCls:'eva',
+body:'<strong>Técnica: Anclar fecha y hora</strong><em>"Perfecto, ¿a qué hora le queda bien? ¿Hoy a las 5 o mañana en la mañana?"</em><br><br>Nunca aceptes un "llámeme después" sin hora concreta. Registra en tu base y cumple puntualmente.'},
+{quote:'"Llámeme la otra semana"',tag:'Evasión',tagCls:'eva',
+body:'<strong>Técnica: Anclar día específico</strong><em>"Claro. ¿Le parece bien el martes o el miércoles? ¿En la mañana o en la tarde?"</em><br><br>Registra como seguimiento prioritario. Si no contesta al segundo intento, pasa a contacto por WhatsApp.'},
+{quote:'"No me interesa" / respuesta hostil',tag:'Evasión',tagCls:'eva',
+body:'<strong>Técnica: Cierre elegante</strong><em>"Entiendo, le agradezco su tiempo. Que tenga un excelente día."</em><br><br>No insistas. Marca como descartado en tu base. No vale la pena invertir energía aquí. Pasa al siguiente lead.'}
+]},
+{type:'tip',text:'Regla de oro: primero VALIDA ("entiendo", "tiene razón"), después DIFERENCIA. Nunca contradigas al propietario de frente. Si siente que lo estás peleando, cuelga. Tú no estás ahí para ganar un argumento, estás ahí para ganar un cliente.'}
+]},
+{
+id:'cierre',title:'Cierre',time:'30 seg',
+desc:'Convertir el interés en una visita presencial agendada.',
+blocks:[
+{type:'script',label:'Cierre hacia visita',text:'"<span class="var">[Nombre]</span>, me gustaría mostrarle cómo funciona todo esto en persona y de paso conocer el inmueble. ¿Le queda mejor entre semana o el fin de semana?"'},
+{type:'branches',label:'¿Qué responde?',options:[
+{text:'✓ Acepta',cls:'g',resp:{title:'Confirmar todo y cerrar',body:'<em>"Perfecto. Entonces quedamos el <span class="var">[día]</span> a las <span class="var">[hora]</span>. Yo voy al inmueble en <span class="var">[dirección]</span>. Le envío un mensaje por WhatsApp confirmando para que tenga mi contacto. ¿Su WhatsApp es este mismo número?"</em><br><br>Envía el WhatsApp de confirmación en menos de 5 minutos con: tu nombre, fecha/hora, y dirección.'}},
+{text:'🤔 Duda',cls:'y',resp:{title:'Quitar presión + agregar valor',body:'<em>"Es sin compromiso alguno. Es solo para que conozca cómo trabajamos, vea si le hace sentido, y de paso le doy una valoración gratuita del canon que debería estar cobrando por su inmueble. Si después de eso no le interesa, perfecto. ¿Le parece?"</em><br><br>La "valoración del canon" es un gancho extra que agrega valor a la visita y baja la resistencia.'}},
+{text:'✕ No quiere',cls:'r',resp:{title:'Derivar a WhatsApp',body:'<em>"Entiendo. ¿Me permite enviarle la información por WhatsApp para que la revise con calma cuando pueda? Así tiene mi contacto por si más adelante le interesa."</em><br><br>Si dice sí: envía el paquete de información (mensaje + PDF). Si dice no: agradece y cierra. Marca como tibio para seguimiento en 2 semanas.'}}
+]},
+{type:'tip',text:'La pregunta "¿entre semana o fin de semana?" es una técnica de cierre alternativo. No preguntas SI quiere reunirse, preguntas CUÁNDO. Eso duplica la tasa de agendamiento porque el cerebro ya está eligiendo una opción en lugar de decidir si quiere o no.'}
+]}
+];
+
+function render(){
+const bar=document.getElementById('stepBar');
+const content=document.getElementById('content');
+bar.innerHTML='';content.innerHTML='';
+
+phases.forEach((p,i)=>{
+const pill=document.createElement('div');
+pill.className='step-pill'+(i===0?' active':'');
+pill.textContent=(i+1)+'. '+p.title;
+pill.id='pill-'+i;
+pill.onclick=()=>goTo(i);
+bar.appendChild(pill);
+
+const div=document.createElement('div');
+div.className='phase'+(i===0?' active':'');
+div.id='phase-'+i;
+
+let html='<div class="phase-header">';
+html+='<div class="phase-num">Fase '+(i+1)+' de 6</div>';
+html+='<div class="phase-title">'+p.title+'</div>';
+html+='<div class="phase-desc">'+p.desc+'</div>';
+html+='<div class="phase-time">'+SVG.clock+' '+p.time+'</div>';
+html+='</div>';
+
+p.blocks.forEach((b,bi)=>{
+if(b.type==='script'){
+html+='<div class="script-block"><div class="script-label">'+b.label+'</div><div class="script-text">'+b.text+'</div></div>';
+}else if(b.type==='branches'){
+html+='<div class="branch-label">'+b.label+'</div><div class="branches">';
+b.options.forEach((o,oi)=>{
+const rid=p.id+'-'+bi+'-'+oi;
+html+='<div class="branch-opt '+o.cls+'" data-rid="'+rid+'" onclick="selectBranch(this,\''+rid+'\')">'+o.text+'</div>';
+});
+html+='</div>';
+b.options.forEach((o,oi)=>{
+const rid=p.id+'-'+bi+'-'+oi;
+html+='<div class="response" id="'+rid+'"><h4>'+o.resp.title+'</h4><p>'+o.resp.body+'</p></div>';
+});
+}else if(b.type==='objections'){
+html+='<div class="obj-section">';
+b.items.forEach((o,oi)=>{
+const oid=p.id+'-obj-'+oi;
+html+='<div class="obj-card" id="'+oid+'" onclick="toggleObj(\''+oid+'\')">';
+html+='<div class="obj-head"><span class="obj-quote">'+o.quote+'</span><span class="obj-tag '+o.tagCls+'">'+o.tag+'</span>'+SVG.chev+'</div>';
+html+='<div class="obj-body">'+o.body+'</div></div>';
+});
+html+='</div>';
+}else if(b.type==='tip'){
+html+='<div class="tip-box">'+SVG.bulb+'<span>'+b.text+'</span></div>';
+}else if(b.type==='divider'){
+html+='<div class="divider"></div>';
+}
+});
+
+div.innerHTML=html;
+content.appendChild(div);
+});
+
+updateNav();
+}
+
+let cur=0;
+
+function goTo(i){
+cur=i;
+document.querySelectorAll('.step-pill').forEach((p,j)=>{
+p.className='step-pill'+(j===i?' active':j<i?' done':'');
+});
+document.querySelectorAll('.phase').forEach((p,j)=>{
+p.className='phase'+(j===i?' active':'');
+});
+updateNav();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function navigate(dir){
+const next=cur+dir;
+if(next>=0&&next<phases.length)goTo(next);
+}
+
+function updateNav(){
+document.getElementById('prevBtn').disabled=cur===0;
+const nb=document.getElementById('nextBtn');
+nb.disabled=cur===phases.length-1;
+nb.textContent=cur===phases.length-1?'Fin':'Siguiente →';
+}
+
+function selectBranch(el,rid){
+const parent=el.parentElement;
+parent.querySelectorAll('.branch-opt').forEach(b=>b.classList.remove('sel'));
+el.classList.add('sel');
+let sib=parent.nextElementSibling;
+while(sib&&sib.classList.contains('response')){
+sib.classList.remove('show');
+sib=sib.nextElementSibling;
+}
+const r=document.getElementById(rid);
+if(r)r.classList.add('show');
+}
+
+function toggleObj(id){
+const card=document.getElementById(id);
+if(card)card.classList.toggle('open');
+}
+
+render();
+</script>
+</body>
+</html>
