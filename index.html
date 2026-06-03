@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROPII.CO — Guía de llamada en frío</title>
+<title>PROPII.CO — Guía comercial completa</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -16,6 +16,8 @@
 --warning:#8B6914;--warning-light:#FEF3CD;
 --info:#1E5A8A;--info-light:#E1F0FA;
 --purple:#5B3E96;--purple-light:#F0ECF7;
+--coral:#C04A2B;--coral-light:#FAECE7;
+--teal:#0F6E56;--teal-light:#E1F5EE;
 --radius:10px;--radius-lg:14px;
 --font:'DM Sans',system-ui,-apple-system,sans-serif;
 --mono:'DM Mono',monospace;
@@ -26,7 +28,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .header h1{font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
 .header p{font-size:.8rem;opacity:.75;margin-top:2px}
 
-.step-bar{display:flex;gap:6px;padding:12px 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:68px;z-index:99;-webkit-overflow-scrolling:touch}
+.view-toggle{display:flex;gap:0;padding:0 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:68px;z-index:99}
+.view-tab{flex:1;padding:12px 0;text-align:center;font-size:.8rem;font-weight:600;cursor:pointer;border-bottom:2.5px solid transparent;color:var(--text3);transition:all .2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.view-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.step-bar{display:none;gap:6px;padding:12px 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:112px;z-index:98;-webkit-overflow-scrolling:touch}
+.step-bar.show{display:flex}
 .step-bar::-webkit-scrollbar{display:none}
 .step-pill{padding:7px 14px;border-radius:20px;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--bg);color:var(--text2);transition:all .2s;user-select:none;-webkit-tap-highlight-color:transparent}
 .step-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -34,10 +41,55 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 .container{max-width:640px;margin:0 auto;padding:1rem 1.25rem 6rem}
 
+.view-section{display:none;animation:fadeIn .25s ease}
+.view-section.active{display:block}
+
 .phase{display:none;animation:fadeIn .25s ease}
 .phase.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+/* Overview styles */
+.overview-intro{font-size:.9rem;color:var(--text2);line-height:1.7;margin-bottom:1.5rem}
+.overview-intro strong{color:var(--text);font-weight:600}
+
+.flow-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);margin:0 0 12px;overflow:hidden;transition:border-color .15s}
+.flow-card:hover{border-color:var(--border2)}
+.flow-head{padding:14px 16px;display:flex;align-items:center;gap:14px}
+.flow-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.8rem;font-weight:700;flex-shrink:0}
+.flow-num.n1{background:var(--bg2);color:var(--text3)}
+.flow-num.n2{background:#EDE7F6;color:var(--purple)}
+.flow-num.n3{background:var(--teal-light);color:var(--teal)}
+.flow-num.n4{background:var(--warning-light);color:var(--warning)}
+.flow-num.n5{background:var(--coral-light);color:var(--coral)}
+.flow-num.n6{background:var(--accent-light);color:var(--accent)}
+.flow-info{flex:1}
+.flow-title{font-size:.9rem;font-weight:700;line-height:1.2}
+.flow-desc{font-size:.78rem;color:var(--text2);margin-top:2px;line-height:1.45}
+.flow-arrow{text-align:center;color:var(--border2);font-size:1.2rem;margin:-4px 0;padding-left:18px}
+.flow-tag{font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.flow-tag.tool{background:var(--info-light);color:var(--info)}
+.flow-tag.key{background:var(--warning-light);color:var(--warning)}
+
+.flow-detail{padding:0 16px 14px 66px;display:none}
+.flow-detail.show{display:block}
+.flow-detail p{font-size:.8rem;color:var(--text2);line-height:1.65;margin-bottom:6px}
+.flow-detail em{color:var(--text);font-style:italic}
+.flow-detail ul{font-size:.8rem;color:var(--text2);line-height:1.65;padding-left:16px;margin:4px 0}
+.flow-detail ul li{margin-bottom:4px}
+
+.flow-card.clickable{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.flow-chevron{width:18px;height:18px;transition:transform .2s;color:var(--text3);flex-shrink:0}
+.flow-card.open .flow-chevron{transform:rotate(180deg)}
+
+.flow-cta{background:var(--accent-light);border:1.5px solid var(--accent-mid);border-radius:var(--radius-lg);padding:14px 16px;text-align:center;margin:20px 0 0;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.flow-cta:hover{background:var(--accent);color:#fff}
+.flow-cta:active{transform:scale(.98)}
+.flow-cta span{font-size:.85rem;font-weight:700;color:var(--accent)}
+.flow-cta:hover span{color:#fff}
+.flow-cta small{display:block;font-size:.72rem;color:var(--accent-mid);margin-top:2px}
+.flow-cta:hover small{color:rgba(255,255,255,.75)}
+
+/* Call tree styles */
 .phase-header{margin:0 0 1.25rem}
 .phase-num{font-family:var(--mono);font-size:.7rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
 .phase-title{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;line-height:1.2}
@@ -49,7 +101,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .script-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:8px}
 .script-text{font-size:.95rem;line-height:1.7;color:var(--text)}
 .script-text .var{color:var(--accent);font-weight:600}
-.script-text em{font-style:italic;color:var(--text2)}
 
 .branch-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:16px 0 8px}
 .branches{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
@@ -88,7 +139,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 .divider{height:1px;background:var(--border);margin:16px 0}
 
-.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 1.25rem;display:flex;gap:10px;z-index:100}
+.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 1.25rem;display:none;gap:10px;z-index:100}
+.nav-bottom.show{display:flex}
 .nav-btn{flex:1;padding:12px;border-radius:var(--radius);font-size:.85rem;font-weight:600;cursor:pointer;text-align:center;border:none;transition:all .15s;-webkit-tap-highlight-color:transparent}
 .nav-btn.prev{background:var(--bg2);color:var(--text2)}
 .nav-btn.next{background:var(--accent);color:#fff}
@@ -97,36 +149,194 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 @media(max-width:500px){
 .header{padding:1.1rem 1rem}
+.view-toggle{padding:0 1rem}
 .step-bar{padding:10px 1rem}
 .container{padding:.85rem 1rem 5.5rem}
 .script-block{padding:.9rem 1rem}
+.flow-detail{padding:0 14px 14px 52px}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-<h1>PROPII.CO — Guía de llamada en frío</h1>
-<p>Árbol de respuestas para captación de inmuebles en arriendo</p>
+<h1>PROPII.CO — Guía comercial</h1>
+<p>Proceso completo de captación de inmuebles en arriendo</p>
+</div>
+
+<div class="view-toggle">
+<div class="view-tab active" id="vtOverview" onclick="switchView('overview')">Flujo general</div>
+<div class="view-tab" id="vtCall" onclick="switchView('call')">Árbol de llamada</div>
 </div>
 
 <div class="step-bar" id="stepBar"></div>
 
-<div class="container" id="content"></div>
+<div class="container">
 
-<div class="nav-bottom">
+<!-- OVERVIEW SECTION -->
+<div class="view-section active" id="overviewSection">
+<p class="overview-intro">El proceso comercial de PROPII.CO tiene <strong>6 fases</strong>. Cada una tiene un objetivo específico y herramientas propias. Si una fase falla, las siguientes no funcionan. Toca cada fase para ver el detalle.</p>
+
+<div class="flow-card clickable" onclick="toggleFlow('f1')">
+<div class="flow-head">
+<div class="flow-num n1">1</div>
+<div class="flow-info">
+<div class="flow-title">Prospección</div>
+<div class="flow-desc">Buscar inmuebles publicados por propietarios directos</div>
+</div>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f1">
+<p>Aquí el comercial busca inmuebles en portales y redes sociales. <strong>No es momento de llamar</strong> — es momento de investigar.</p>
+<ul>
+<li><strong>Fuentes:</strong> Fincaraíz, Metrocuadrado, OLX, Facebook Marketplace, Instagram, referidos</li>
+<li><strong>Qué registrar:</strong> nombre del propietario, teléfono, tipo de inmueble, zona, canon publicado, portal de origen</li>
+<li><strong>Meta diaria:</strong> mínimo 20 leads nuevos por comercial</li>
+<li><strong>Filtro clave:</strong> buscar avisos publicados por personas naturales, no por otras inmobiliarias</li>
+</ul>
+<p><em>Un buen prospecto es un propietario que lleva más de 3 semanas publicado — ya está cansado de curiosos.</em></p>
+</div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<div class="flow-card clickable" onclick="toggleFlow('f2')">
+<div class="flow-head">
+<div class="flow-num n2">2</div>
+<div class="flow-info">
+<div class="flow-title">Llamada en frío</div>
+<div class="flow-desc">Primer contacto telefónico con el propietario (3 min máx)</div>
+</div>
+<span class="flow-tag key">Clave</span>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f2">
+<p>Esta es la fase más importante. El objetivo NO es vender PROPII.CO — es conseguir uno de estos tres resultados:</p>
+<ul>
+<li><strong>Resultado A:</strong> Agendar visita presencial al inmueble</li>
+<li><strong>Resultado B:</strong> Conseguir permiso para enviar información por WhatsApp</li>
+<li><strong>Resultado C:</strong> Identificar una objeción real que se pueda trabajar en seguimiento</li>
+</ul>
+<p><em>El árbol de respuestas completo está en la pestaña "Árbol de llamada". Estúdialo antes de hacer tu primera llamada.</em></p>
+</div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<div class="flow-card clickable" onclick="toggleFlow('f3')">
+<div class="flow-head">
+<div class="flow-num n3">3</div>
+<div class="flow-info">
+<div class="flow-title">Envío de información</div>
+<div class="flow-desc">Paquete por WhatsApp después de la llamada</div>
+</div>
+<span class="flow-tag tool">WhatsApp</span>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f3">
+<p>Si la llamada fue positiva o tibia, se envía un paquete por WhatsApp <strong>dentro de los primeros 5 minutos</strong>. El paquete incluye:</p>
+<ul>
+<li><strong>Mensaje personalizado:</strong> "Hola [nombre], soy [tu nombre] de PROPII.CO. Como le comenté, le comparto nuestra propuesta para que la revise con calma."</li>
+<li><strong>PDF de propuesta de valor:</strong> una página con los beneficios clave del servicio</li>
+<li><strong>Caso de éxito:</strong> si tienes uno relevante para la situación del propietario</li>
+</ul>
+<p><em>Nunca envíes un mensaje genérico. Referencia algo que el propietario dijo en la llamada para que sienta que es personal.</em></p>
+</div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<div class="flow-card clickable" onclick="toggleFlow('f4')">
+<div class="flow-head">
+<div class="flow-num n4">4</div>
+<div class="flow-info">
+<div class="flow-title">Seguimiento</div>
+<div class="flow-desc">Protocolo de recontacto 7-14-21 días</div>
+</div>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f4">
+<p>Los leads que dijeron "llámame después", "déjame pensarlo" o "envíame info" necesitan seguimiento sistemático:</p>
+<ul>
+<li><strong>Día 7:</strong> WhatsApp corto — "Hola [nombre], ¿tuvo oportunidad de revisar la información? Quedo atento."</li>
+<li><strong>Día 14:</strong> Llamada — "Lo llamo porque quería saber si tiene alguna duda sobre nuestra propuesta."</li>
+<li><strong>Día 21:</strong> Último intento — "Entiendo que está ocupado. Le dejo mi contacto por si más adelante necesita ayuda con su inmueble."</li>
+</ul>
+<p><em>Sin seguimiento, el 70% de tus oportunidades se mueren. La mayoría de los cierres ocurren entre el contacto 3 y el 5, no en el primero.</em></p>
+</div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<div class="flow-card clickable" onclick="toggleFlow('f5')">
+<div class="flow-head">
+<div class="flow-num n5">5</div>
+<div class="flow-info">
+<div class="flow-title">Visita presencial</div>
+<div class="flow-desc">Conocer el inmueble y cerrar la consignación</div>
+</div>
+<span class="flow-tag key">Cierre</span>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f5">
+<p>Cuando el propietario acepta la visita, el comercial va al inmueble con todo listo para cerrar ese día:</p>
+<ul>
+<li><strong>Llevar:</strong> contrato de consignación, brochure impreso o digital, cámara/celular para fotos</li>
+<li><strong>Hacer:</strong> recorrido completo del inmueble, registro fotográfico, valoración del canon</li>
+<li><strong>Decir:</strong> explicar el proceso paso a paso, resolver dudas finales, presentar el contrato</li>
+<li><strong>Cerrar:</strong> "¿Le parece si firmamos hoy para arrancar la promoción esta misma semana?"</li>
+</ul>
+<p><em>La visita es el momento de máxima confianza. Si saliste de la visita sin firma, es muy difícil cerrar después.</em></p>
+</div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<div class="flow-card clickable" onclick="toggleFlow('f6')">
+<div class="flow-head">
+<div class="flow-num n6">6</div>
+<div class="flow-info">
+<div class="flow-title">Onboarding</div>
+<div class="flow-desc">Activar el inmueble y arrancar la promoción</div>
+</div>
+<svg class="flow-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="flow-detail" id="f6">
+<p>Después de la firma, el proceso de activación debe ser rápido y organizado para que el propietario sienta profesionalismo:</p>
+<ul>
+<li><strong>Día 1:</strong> Fotos profesionales del inmueble + inventario detallado</li>
+<li><strong>Día 2-3:</strong> Publicación en todos los portales (Fincaraíz, Metrocuadrado, redes)</li>
+<li><strong>Día 3:</strong> Mensaje al propietario confirmando que el inmueble ya está activo con links de las publicaciones</li>
+<li><strong>Semana 1-2:</strong> Primer reporte de gestión — cuántas visitas, cuántos interesados, retroalimentación</li>
+</ul>
+<p><em>Un onboarding desorganizado mata la confianza que construiste en 5 fases. El propietario tiene que sentir que tomó la decisión correcta desde el primer día.</em></p>
+</div>
+</div>
+
+<div class="flow-cta" onclick="switchView('call')">
+<span>Ir al árbol de llamada detallado →</span>
+<small>Guion completo con respuestas a cada objeción</small>
+</div>
+</div>
+
+<!-- CALL TREE SECTION -->
+<div class="view-section" id="callSection"></div>
+
+</div>
+
+<div class="nav-bottom" id="navBottom">
 <button class="nav-btn prev" id="prevBtn" onclick="navigate(-1)">← Anterior</button>
 <button class="nav-btn next" id="nextBtn" onclick="navigate(1)">Siguiente →</button>
 </div>
 
 <script>
-const SVG={
+var SVG={
 clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
 bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>',
 chev:'<svg class="obj-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>'
 };
 
-const phases=[
+var phases=[
 {
 id:'apertura',title:'Apertura',time:'15 seg',
 desc:'Ganar el permiso para hablar. Sin esto, nada funciona.',
@@ -173,7 +383,7 @@ blocks:[
 {type:'script',label:'Pitch base (adapta según el sondeo)',text:'"<span class="var">[Nombre]</span>, en PROPII.CO lo que hacemos es encargarnos de todo el proceso de arriendo de su inmueble. Desde conseguir un arrendatario con perfil financiero validado — cero curiosos, cero paseos — hasta manejar contrato, póliza de seguro, cobros mensuales y reparaciones. Usted literalmente solo recibe su plata cada mes y nosotros trabajamos."'},
 {type:'divider'},
 {type:'script',label:'Si pregunta por el costo (solo si pregunta)',text:'"Nuestro servicio es el 10% mensual del canon de arrendamiento. Con eso usted tiene todo cubierto: la promoción, el estudio del arrendatario, el contrato, la póliza y la administración completa durante un año. Después de ese año, si quiere seguir con nosotros puede, y si prefiere manejarlo usted, perfecto."'},
-{type:'tip',text:'El 10% NO se menciona si no lo preguntan. Primero se vende el valor, después el precio. Si el propietario siente que el servicio vale más que el costo, el precio nunca es problema. Si preguntan, responde con naturalidad y ancla inmediatamente al beneficio.'},
+{type:'tip',text:'El 10% NO se menciona si no lo preguntan. Primero se vende el valor, después el precio. Si el propietario siente que el servicio vale más que el costo, el precio nunca es problema.'},
 {type:'divider'},
 {type:'branches',label:'Frases de refuerzo según perfil',options:[
 {text:'Novato',cls:'g',resp:{title:'Refuerzo para propietario novato',body:'<em>"Es como tener un equipo completo trabajando por su inmueble. Usted no tiene que aprender a hacer contratos ni a perseguir pagos. Nosotros ya tenemos eso resuelto."</em>'}},
@@ -187,32 +397,19 @@ id:'objeciones',title:'Objeciones',time:'Variable',
 desc:'Manejo de cada resistencia con técnica específica. Toca la que te están diciendo.',
 blocks:[
 {type:'objections',items:[
-{quote:'"No quiero con inmobiliarias"',tag:'Desconfianza',tagCls:'des',
-body:'<strong>Técnica: Validar + diferenciar</strong><em>"Tiene toda la razón en ser cauteloso. La mayoría de inmobiliarias funcionan como intermediarios que cobran y desaparecen. Nosotros somos diferentes: administramos su inmueble como si fuera nuestro. Tenemos póliza, respaldo jurídico y usted tiene una persona asignada que le responde siempre. ¿Me da la oportunidad de mostrarle cómo trabajamos? Sin compromiso."</em>'},
-{quote:'"Las inmobiliarias son unas ladronas"',tag:'Desconfianza',tagCls:'des',
-body:'<strong>Técnica: Validar emoción + transparencia</strong><em>"Entiendo por qué dice eso, y lamentablemente hay razones para pensarlo. Por eso nosotros trabajamos diferente: todo es digital y transparente, usted ve cada movimiento de su inmueble. Muchos de nuestros mejores clientes llegaron pensando exactamente lo mismo que usted, y hoy llevan más de un año con nosotros. ¿Le gustaría conocer cómo funciona?"</em>'},
-{quote:'"Me entregan el apartamento vuelto nada"',tag:'Desconfianza',tagCls:'des',
-body:'<strong>Técnica: Mostrar protección concreta</strong><em>"Eso es justo lo que evitamos. Hacemos un inventario fotográfico detallado al inicio, el contrato incluye cláusulas de responsabilidad del arrendatario, y hay póliza que cubre daños. Si el arrendatario entrega mal, la póliza responde. Su patrimonio está protegido."</em>'},
-{quote:'"Ustedes manejan mi plata"',tag:'Desconfianza',tagCls:'des',
-body:'<strong>Técnica: Transparencia + proceso claro</strong><em>"Entiendo la preocupación. Le cuento cómo funciona: el arrendatario paga, nosotros le transferimos a usted dentro de los primeros 5 días del mes, descontando solo el 10% del servicio. Todo queda registrado digitalmente. Usted siempre sabe cuánto entró y cuánto sale."</em>'},
-{quote:'"No lo dejo en exclusiva"',tag:'Competencia',tagCls:'com',
-body:'<strong>Técnica: Explicar por qué la exclusiva lo beneficia</strong><em>"Entiendo. Le explico por qué trabajamos en exclusiva: cuando su inmueble está con cinco inmobiliarias, ninguna invierte de verdad en promocionarlo porque sabe que otra puede cerrar primero. Con nosotros, invertimos en fotos profesionales, publicación en todos los portales, y estudio serio de arrendatarios porque sabemos que ese esfuerzo da resultado. La exclusiva es para que usted reciba un servicio de verdad, no un aviso más."</em>'},
-{quote:'"Ya tengo inmobiliaria"',tag:'Competencia',tagCls:'com',
-body:'<strong>Técnica: Pregunta reveladora</strong><em>"Perfecto. ¿Y cómo le ha ido? ¿Hace cuánto lo tiene con ellos?"</em><br><br>Si lleva tiempo sin resultado: <em>"Si lleva más de un mes y no se ha arrendado, algo no está funcionando. ¿No cree que vale la pena explorar otra opción?"</em><br><br>Si le va bien: <em>"Me alegra. Si en algún momento necesita una segunda opinión o quiere comparar servicios, quedo a la orden."</em> No insistas — cierra amablemente.'},
-{quote:'"Hay varias inmobiliarias arrendándolo"',tag:'Competencia',tagCls:'com',
-body:'<strong>Técnica: Convertir debilidad en argumento</strong><em>"Ese es justamente el problema. Cuando hay muchas manos, ninguna se responsabiliza de verdad. Si algo sale mal con el arrendatario, ¿quién responde? ¿La inmobiliaria A o la B? Con nosotros tiene un solo responsable de principio a fin, con póliza y respaldo jurídico."</em>'},
-{quote:'"Yo lo puedo hacer solo"',tag:'Autosuficiencia',tagCls:'aut',
-body:'<strong>Técnica: Preguntas de costo oculto</strong><em>"Claro que puede, y seguro lo hace bien. Pero déjeme hacerle unas preguntas rápidas: ¿cuántas llamadas de curiosos atiende al mes? ¿Quién le hace el estudio financiero al arrendatario? Si el inquilino deja de pagar en el mes tres, ¿usted tiene abogado y póliza para responder?</em><br><br><em>Todo eso tiene un costo en tiempo y riesgo. Nosotros lo asumimos por el 10% del canon."</em>'},
-{quote:'"Yo ya lo hago con seguro"',tag:'Autosuficiencia',tagCls:'aut',
-body:'<strong>Técnica: Ampliar el alcance</strong><em>"El seguro de arrendamiento cubre el canon cuando no pagan. Eso está bien. Pero ¿quién le consigue el arrendatario? ¿Quién hace el contrato? ¿Quién coordina las reparaciones? ¿Quién cobra cada mes? El seguro cubre una parte, nosotros cubrimos todo."</em>'},
-{quote:'"No quiero pagar comisión"',tag:'Autosuficiencia',tagCls:'aut',
-body:'<strong>Técnica: Reencuadrar el costo</strong><em>"Entiendo. Hagamos una cuenta rápida: si su canon es de un millón, el 10% son cien mil pesos. Por esa plata usted tiene un equipo que le consigue arrendatario, le cobra, le hace mantenimiento, le resuelve problemas legales y le protege con póliza. ¿Cuánto le costaría hacer todo eso solo? ¿Cuánto vale su tiempo?"</em><br><br>Siempre lleva la objeción del precio al terreno del valor y del tiempo.'},
-{quote:'"Llámeme que estoy ocupado"',tag:'Evasión',tagCls:'eva',
-body:'<strong>Técnica: Anclar fecha y hora</strong><em>"Perfecto, ¿a qué hora le queda bien? ¿Hoy a las 5 o mañana en la mañana?"</em><br><br>Nunca aceptes un "llámeme después" sin hora concreta. Registra en tu base y cumple puntualmente.'},
-{quote:'"Llámeme la otra semana"',tag:'Evasión',tagCls:'eva',
-body:'<strong>Técnica: Anclar día específico</strong><em>"Claro. ¿Le parece bien el martes o el miércoles? ¿En la mañana o en la tarde?"</em><br><br>Registra como seguimiento prioritario. Si no contesta al segundo intento, pasa a contacto por WhatsApp.'},
-{quote:'"No me interesa" / respuesta hostil',tag:'Evasión',tagCls:'eva',
-body:'<strong>Técnica: Cierre elegante</strong><em>"Entiendo, le agradezco su tiempo. Que tenga un excelente día."</em><br><br>No insistas. Marca como descartado en tu base. No vale la pena invertir energía aquí. Pasa al siguiente lead.'}
+{quote:'"No quiero con inmobiliarias"',tag:'Desconfianza',tagCls:'des',body:'<strong>Técnica: Validar + diferenciar</strong><em>"Tiene toda la razón en ser cauteloso. La mayoría de inmobiliarias funcionan como intermediarios que cobran y desaparecen. Nosotros somos diferentes: administramos su inmueble como si fuera nuestro. Tenemos póliza, respaldo jurídico y usted tiene una persona asignada que le responde siempre. ¿Me da la oportunidad de mostrarle cómo trabajamos? Sin compromiso."</em>'},
+{quote:'"Las inmobiliarias son unas ladronas"',tag:'Desconfianza',tagCls:'des',body:'<strong>Técnica: Validar emoción + transparencia</strong><em>"Entiendo por qué dice eso, y lamentablemente hay razones para pensarlo. Por eso nosotros trabajamos diferente: todo es digital y transparente, usted ve cada movimiento de su inmueble. Muchos de nuestros mejores clientes llegaron pensando exactamente lo mismo que usted, y hoy llevan más de un año con nosotros. ¿Le gustaría conocer cómo funciona?"</em>'},
+{quote:'"Me entregan el apartamento vuelto nada"',tag:'Desconfianza',tagCls:'des',body:'<strong>Técnica: Mostrar protección concreta</strong><em>"Eso es justo lo que evitamos. Hacemos un inventario fotográfico detallado al inicio, el contrato incluye cláusulas de responsabilidad del arrendatario, y hay póliza que cubre daños. Si el arrendatario entrega mal, la póliza responde. Su patrimonio está protegido."</em>'},
+{quote:'"Ustedes manejan mi plata"',tag:'Desconfianza',tagCls:'des',body:'<strong>Técnica: Transparencia + proceso claro</strong><em>"Entiendo la preocupación. Le cuento cómo funciona: el arrendatario paga, nosotros le transferimos a usted dentro de los primeros 5 días del mes, descontando solo el 10% del servicio. Todo queda registrado digitalmente. Usted siempre sabe cuánto entró y cuánto sale."</em>'},
+{quote:'"No lo dejo en exclusiva"',tag:'Competencia',tagCls:'com',body:'<strong>Técnica: Explicar por qué la exclusiva lo beneficia</strong><em>"Entiendo. Le explico por qué trabajamos en exclusiva: cuando su inmueble está con cinco inmobiliarias, ninguna invierte de verdad en promocionarlo porque sabe que otra puede cerrar primero. Con nosotros, invertimos en fotos profesionales, publicación en todos los portales, y estudio serio de arrendatarios porque sabemos que ese esfuerzo da resultado. La exclusiva es para que usted reciba un servicio de verdad, no un aviso más."</em>'},
+{quote:'"Ya tengo inmobiliaria"',tag:'Competencia',tagCls:'com',body:'<strong>Técnica: Pregunta reveladora</strong><em>"Perfecto. ¿Y cómo le ha ido? ¿Hace cuánto lo tiene con ellos?"</em><br><br>Si lleva tiempo sin resultado: <em>"Si lleva más de un mes y no se ha arrendado, algo no está funcionando. ¿No cree que vale la pena explorar otra opción?"</em><br><br>Si le va bien: <em>"Me alegra. Si en algún momento necesita una segunda opinión o quiere comparar servicios, quedo a la orden."</em> No insistas.'},
+{quote:'"Hay varias inmobiliarias arrendándolo"',tag:'Competencia',tagCls:'com',body:'<strong>Técnica: Convertir debilidad en argumento</strong><em>"Ese es justamente el problema. Cuando hay muchas manos, ninguna se responsabiliza de verdad. Si algo sale mal con el arrendatario, ¿quién responde? ¿La inmobiliaria A o la B? Con nosotros tiene un solo responsable de principio a fin, con póliza y respaldo jurídico."</em>'},
+{quote:'"Yo lo puedo hacer solo"',tag:'Autosuficiencia',tagCls:'aut',body:'<strong>Técnica: Preguntas de costo oculto</strong><em>"Claro que puede, y seguro lo hace bien. Pero déjeme hacerle unas preguntas rápidas: ¿cuántas llamadas de curiosos atiende al mes? ¿Quién le hace el estudio financiero al arrendatario? Si el inquilino deja de pagar en el mes tres, ¿usted tiene abogado y póliza para responder?</em><br><br><em>Todo eso tiene un costo en tiempo y riesgo. Nosotros lo asumimos por el 10% del canon."</em>'},
+{quote:'"Yo ya lo hago con seguro"',tag:'Autosuficiencia',tagCls:'aut',body:'<strong>Técnica: Ampliar el alcance</strong><em>"El seguro de arrendamiento cubre el canon cuando no pagan. Eso está bien. Pero ¿quién le consigue el arrendatario? ¿Quién hace el contrato? ¿Quién coordina las reparaciones? ¿Quién cobra cada mes? El seguro cubre una parte, nosotros cubrimos todo."</em>'},
+{quote:'"No quiero pagar comisión"',tag:'Autosuficiencia',tagCls:'aut',body:'<strong>Técnica: Reencuadrar el costo</strong><em>"Entiendo. Hagamos una cuenta rápida: si su canon es de un millón, el 10% son cien mil pesos. Por esa plata usted tiene un equipo que le consigue arrendatario, le cobra, le hace mantenimiento, le resuelve problemas legales y le protege con póliza. ¿Cuánto le costaría hacer todo eso solo? ¿Cuánto vale su tiempo?"</em><br><br>Siempre lleva la objeción del precio al terreno del valor y del tiempo.'},
+{quote:'"Llámeme que estoy ocupado"',tag:'Evasión',tagCls:'eva',body:'<strong>Técnica: Anclar fecha y hora</strong><em>"Perfecto, ¿a qué hora le queda bien? ¿Hoy a las 5 o mañana en la mañana?"</em><br><br>Nunca aceptes un "llámeme después" sin hora concreta. Registra en tu base y cumple puntualmente.'},
+{quote:'"Llámeme la otra semana"',tag:'Evasión',tagCls:'eva',body:'<strong>Técnica: Anclar día específico</strong><em>"Claro. ¿Le parece bien el martes o el miércoles? ¿En la mañana o en la tarde?"</em><br><br>Registra como seguimiento prioritario. Si no contesta al segundo intento, pasa a contacto por WhatsApp.'},
+{quote:'"No me interesa" / respuesta hostil',tag:'Evasión',tagCls:'eva',body:'<strong>Técnica: Cierre elegante</strong><em>"Entiendo, le agradezco su tiempo. Que tenga un excelente día."</em><br><br>No insistas. Marca como descartado en tu base. No vale la pena invertir energía aquí. Pasa al siguiente lead.'}
 ]},
 {type:'tip',text:'Regla de oro: primero VALIDA ("entiendo", "tiene razón"), después DIFERENCIA. Nunca contradigas al propietario de frente. Si siente que lo estás peleando, cuelga. Tú no estás ahí para ganar un argumento, estás ahí para ganar un cliente.'}
 ]},
@@ -230,48 +427,73 @@ blocks:[
 ]}
 ];
 
-function render(){
-const bar=document.getElementById('stepBar');
-const content=document.getElementById('content');
+var cur=0;
+var currentView='overview';
+
+function switchView(v){
+currentView=v;
+document.getElementById('vtOverview').className='view-tab'+(v==='overview'?' active':'');
+document.getElementById('vtCall').className='view-tab'+(v==='call'?' active':'');
+document.getElementById('overviewSection').className='view-section'+(v==='overview'?' active':'');
+document.getElementById('callSection').className='view-section'+(v==='call'?' active':'');
+document.getElementById('stepBar').className='step-bar'+(v==='call'?' show':'');
+document.getElementById('navBottom').className='nav-bottom'+(v==='call'?' show':'');
+if(v==='call'){renderCallTree();goTo(0);}
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleFlow(id){
+var el=document.getElementById(id);
+if(!el)return;
+var card=el.parentElement;
+var wasOpen=el.classList.contains('show');
+document.querySelectorAll('.flow-detail').forEach(function(d){d.classList.remove('show');d.parentElement.classList.remove('open');});
+if(!wasOpen){el.classList.add('show');card.classList.add('open');}
+}
+
+function renderCallTree(){
+var bar=document.getElementById('stepBar');
+var content=document.getElementById('callSection');
+if(bar.children.length>0)return;
 bar.innerHTML='';content.innerHTML='';
 
-phases.forEach((p,i)=>{
-const pill=document.createElement('div');
+phases.forEach(function(p,i){
+var pill=document.createElement('div');
 pill.className='step-pill'+(i===0?' active':'');
 pill.textContent=(i+1)+'. '+p.title;
 pill.id='pill-'+i;
-pill.onclick=()=>goTo(i);
+pill.onclick=function(){goTo(i);};
 bar.appendChild(pill);
 
-const div=document.createElement('div');
+var div=document.createElement('div');
 div.className='phase'+(i===0?' active':'');
 div.id='phase-'+i;
 
-let html='<div class="phase-header">';
+var html='<div class="phase-header">';
 html+='<div class="phase-num">Fase '+(i+1)+' de 6</div>';
 html+='<div class="phase-title">'+p.title+'</div>';
 html+='<div class="phase-desc">'+p.desc+'</div>';
 html+='<div class="phase-time">'+SVG.clock+' '+p.time+'</div>';
 html+='</div>';
 
-p.blocks.forEach((b,bi)=>{
+p.blocks.forEach(function(b,bi){
 if(b.type==='script'){
 html+='<div class="script-block"><div class="script-label">'+b.label+'</div><div class="script-text">'+b.text+'</div></div>';
 }else if(b.type==='branches'){
 html+='<div class="branch-label">'+b.label+'</div><div class="branches">';
-b.options.forEach((o,oi)=>{
-const rid=p.id+'-'+bi+'-'+oi;
+b.options.forEach(function(o,oi){
+var rid=p.id+'-'+bi+'-'+oi;
 html+='<div class="branch-opt '+o.cls+'" data-rid="'+rid+'" onclick="selectBranch(this,\''+rid+'\')">'+o.text+'</div>';
 });
 html+='</div>';
-b.options.forEach((o,oi)=>{
-const rid=p.id+'-'+bi+'-'+oi;
+b.options.forEach(function(o,oi){
+var rid=p.id+'-'+bi+'-'+oi;
 html+='<div class="response" id="'+rid+'"><h4>'+o.resp.title+'</h4><p>'+o.resp.body+'</p></div>';
 });
 }else if(b.type==='objections'){
 html+='<div class="obj-section">';
-b.items.forEach((o,oi)=>{
-const oid=p.id+'-obj-'+oi;
+b.items.forEach(function(o,oi){
+var oid=p.id+'-obj-'+oi;
 html+='<div class="obj-card" id="'+oid+'" onclick="toggleObj(\''+oid+'\')">';
 html+='<div class="obj-head"><span class="obj-quote">'+o.quote+'</span><span class="obj-tag '+o.tagCls+'">'+o.tag+'</span>'+SVG.chev+'</div>';
 html+='<div class="obj-body">'+o.body+'</div></div>';
@@ -287,18 +509,15 @@ html+='<div class="divider"></div>';
 div.innerHTML=html;
 content.appendChild(div);
 });
-
 updateNav();
 }
 
-let cur=0;
-
 function goTo(i){
 cur=i;
-document.querySelectorAll('.step-pill').forEach((p,j)=>{
+document.querySelectorAll('.step-pill').forEach(function(p,j){
 p.className='step-pill'+(j===i?' active':j<i?' done':'');
 });
-document.querySelectorAll('.phase').forEach((p,j)=>{
+document.querySelectorAll('.phase').forEach(function(p,j){
 p.className='phase'+(j===i?' active':'');
 });
 updateNav();
@@ -306,36 +525,31 @@ window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function navigate(dir){
-const next=cur+dir;
+var next=cur+dir;
 if(next>=0&&next<phases.length)goTo(next);
 }
 
 function updateNav(){
 document.getElementById('prevBtn').disabled=cur===0;
-const nb=document.getElementById('nextBtn');
+var nb=document.getElementById('nextBtn');
 nb.disabled=cur===phases.length-1;
 nb.textContent=cur===phases.length-1?'Fin':'Siguiente →';
 }
 
 function selectBranch(el,rid){
-const parent=el.parentElement;
-parent.querySelectorAll('.branch-opt').forEach(b=>b.classList.remove('sel'));
+var parent=el.parentElement;
+parent.querySelectorAll('.branch-opt').forEach(function(b){b.classList.remove('sel');});
 el.classList.add('sel');
-let sib=parent.nextElementSibling;
-while(sib&&sib.classList.contains('response')){
-sib.classList.remove('show');
-sib=sib.nextElementSibling;
-}
-const r=document.getElementById(rid);
+var sib=parent.nextElementSibling;
+while(sib&&sib.classList.contains('response')){sib.classList.remove('show');sib=sib.nextElementSibling;}
+var r=document.getElementById(rid);
 if(r)r.classList.add('show');
 }
 
 function toggleObj(id){
-const card=document.getElementById(id);
+var card=document.getElementById(id);
 if(card)card.classList.toggle('open');
 }
-
-render();
 </script>
 </body>
 </html>
