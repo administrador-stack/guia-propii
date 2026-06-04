@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PROPII.CO — Vive ligero</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--indigo:#2A206F;
+--indigo-light:#3D338A;
+--indigo-soft:rgba(42,32,111,.06);
+--indigo-glow:rgba(42,32,111,.12);
+--mint:#5DCFB3;
+--mint-dark:#3AB89A;
+--mint-light:#E6F9F3;
+--mint-glow:rgba(93,207,179,.15);
+--white:#FFFFFF;
+--offwhite:#FAFBFD;
+--gray100:#F3F4F8;
+--gray200:#E4E6ED;
+--gray300:#C8CBD6;
+--gray400:#9DA2B3;
+--gray500:#6B7186;
+--text:#2A206F;
+--font:'Outfit',system-ui,sans-serif;
+--serif:'Playfair Display',Georgia,serif;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);color:var(--text);background:var(--offwhite);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem 1.5rem;position:relative;overflow:hidden;background:linear-gradient(160deg,#F8F7FF 0%,#EEFBF7 50%,#F3F4F8 100%)}
+.hero::before{content:'';position:absolute;top:-30%;right:-20%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(93,207,179,.12) 0%,transparent 70%);animation:float 8s ease-in-out infinite}
+.hero::after{content:'';position:absolute;bottom:-20%;left:-15%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(42,32,111,.06) 0%,transparent 70%);animation:float 10s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
+
+.hero-logo{width:72px;height:72px;border-radius:20px;object-fit:contain;margin-bottom:1.5rem;animation:fadeUp .8s ease both;filter:drop-shadow(0 4px 12px rgba(42,32,111,.1))}
+.hero-tagline{font-size:.8rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mint-dark);margin-bottom:1rem;animation:fadeUp .8s ease .1s both}
+.hero h1{font-family:var(--serif);font-size:clamp(2rem,6vw,3.2rem);font-weight:700;line-height:1.15;color:var(--indigo);margin-bottom:1rem;animation:fadeUp .8s ease .2s both}
+.hero h1 em{font-style:italic;color:var(--mint-dark)}
+.hero-sub{font-size:clamp(.95rem,2.5vw,1.15rem);font-weight:400;color:var(--gray500);max-width:480px;line-height:1.65;margin-bottom:2rem;animation:fadeUp .8s ease .3s both}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--indigo);color:var(--white);font-family:var(--font);font-size:.9rem;font-weight:600;border:none;border-radius:50px;cursor:pointer;text-decoration:none;transition:all .3s;animation:fadeUp .8s ease .4s both;box-shadow:0 4px 20px rgba(42,32,111,.25)}
+.hero-cta:hover{background:var(--indigo-light);transform:translateY(-2px);box-shadow:0 6px 28px rgba(42,32,111,.3)}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);animation:bounce 2s ease infinite 1.5s}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.hero-scroll svg{width:28px;height:28px;color:var(--gray300)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+section{padding:4.5rem 1.5rem}
+.section-inner{max-width:580px;margin:0 auto}
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mint-dark);margin-bottom:.6rem}
+.section-title{font-family:var(--serif);font-size:clamp(1.5rem,4.5vw,2rem);font-weight:700;color:var(--indigo);line-height:1.2;margin-bottom:1rem}
+.section-desc{font-size:.95rem;color:var(--gray500);line-height:1.7;margin-bottom:2rem}
+
+/* PAIN SCENARIOS */
+.scenarios{background:var(--white)}
+.scenario-card{background:var(--offwhite);border:1px solid var(--gray200);border-radius:16px;padding:1.5rem;margin-bottom:14px;cursor:pointer;transition:all .3s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.scenario-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--mint);border-radius:4px 0 0 4px;opacity:0;transition:opacity .3s}
+.scenario-card.open::before{opacity:1}
+.scenario-card:hover{border-color:var(--gray300)}
+.scenario-top{display:flex;align-items:flex-start;gap:14px}
+.scenario-icon{font-size:1.8rem;flex-shrink:0;margin-top:2px}
+.scenario-info{flex:1}
+.scenario-title{font-size:.95rem;font-weight:700;color:var(--indigo);line-height:1.3;margin-bottom:4px}
+.scenario-hook{font-size:.82rem;color:var(--gray400);line-height:1.45}
+.scenario-chevron{width:20px;height:20px;flex-shrink:0;color:var(--gray300);transition:transform .3s;margin-top:4px}
+.scenario-card.open .scenario-chevron{transform:rotate(180deg);color:var(--mint-dark)}
+.scenario-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.scenario-card.open .scenario-body{grid-template-rows:1fr}
+.scenario-content{overflow:hidden}
+.scenario-detail{padding:14px 0 0 0;margin-left:48px}
+.scenario-problem{font-size:.85rem;color:var(--gray500);line-height:1.65;margin-bottom:12px;padding:12px 14px;background:rgba(42,32,111,.03);border-radius:10px;border-left:3px solid var(--gray300)}
+.scenario-solution{font-size:.85rem;color:var(--indigo);line-height:1.65;padding:12px 14px;background:var(--mint-glow);border-radius:10px;border-left:3px solid var(--mint)}
+.scenario-solution strong{font-weight:700}
+
+/* COMPARISON */
+.comparison{background:linear-gradient(180deg,var(--white) 0%,var(--offwhite) 100%)}
+.compare-table{border-radius:16px;overflow:hidden;border:1px solid var(--gray200);background:var(--white)}
+.compare-header{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0;background:var(--indigo);padding:0}
+.compare-header div{padding:14px 12px;text-align:center;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--white)}
+.compare-header div:first-child{text-align:left;color:rgba(255,255,255,.6)}
+.compare-header div:last-child{background:var(--mint-dark)}
+.compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0;border-bottom:1px solid var(--gray100)}
+.compare-row:last-child{border-bottom:none}
+.compare-row div{padding:12px;font-size:.8rem;display:flex;align-items:center}
+.compare-row div:first-child{font-weight:500;color:var(--indigo)}
+.compare-row div:nth-child(2){justify-content:center;color:var(--gray400)}
+.compare-row div:last-child{justify-content:center;font-weight:600;color:var(--mint-dark);background:rgba(93,207,179,.04)}
+.check{color:var(--mint-dark);font-weight:700;font-size:1.1rem}
+.cross{color:var(--gray300);font-size:1.1rem}
+.partial{color:var(--gray400);font-size:.75rem;text-align:center}
+
+/* HOW IT WORKS */
+.how-it-works{background:var(--white)}
+.step-list{counter-reset:steps}
+.step-item{display:flex;gap:18px;margin-bottom:28px;position:relative}
+.step-item:not(:last-child)::after{content:'';position:absolute;left:21px;top:48px;bottom:-12px;width:2px;background:var(--gray200)}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--indigo);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;position:relative;z-index:1;box-shadow:0 2px 8px rgba(42,32,111,.2)}
+.step-content{flex:1;padding-top:6px}
+.step-title{font-size:1rem;font-weight:700;color:var(--indigo);margin-bottom:4px}
+.step-desc{font-size:.85rem;color:var(--gray500);line-height:1.6}
+
+/* PRICING */
+.pricing{background:linear-gradient(160deg,#2A206F 0%,#3D338A 50%,#2A206F 100%);color:var(--white);text-align:center;position:relative;overflow:hidden}
+.pricing::before{content:'';position:absolute;top:-50%;right:-30%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(93,207,179,.1) 0%,transparent 60%)}
+.pricing .section-label{color:var(--mint)}
+.pricing .section-title{color:var(--white)}
+.pricing .section-desc{color:rgba(255,255,255,.65)}
+.price-card{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:2rem 1.5rem;margin:0 auto;max-width:400px}
+.price-amount{font-family:var(--serif);font-size:2.8rem;font-weight:700;color:var(--mint);line-height:1}
+.price-label{font-size:.85rem;color:rgba(255,255,255,.5);margin-top:4px;margin-bottom:1.2rem}
+.price-includes{text-align:left}
+.price-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:.85rem;color:rgba(255,255,255,.8);line-height:1.5}
+.price-item svg{width:18px;height:18px;color:var(--mint);flex-shrink:0;margin-top:2px}
+.price-note{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:1.2rem;line-height:1.5}
+
+/* GUARANTEE */
+.guarantee{background:var(--offwhite);text-align:center}
+.guarantee-badge{width:80px;height:80px;border-radius:50%;background:var(--mint-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:2.2rem}
+.guarantee-text{font-size:.9rem;color:var(--gray500);line-height:1.7;max-width:440px;margin:0 auto}
+.guarantee-text strong{color:var(--indigo);font-weight:600}
+
+/* CTA */
+.cta{background:var(--white);text-align:center;padding:3.5rem 1.5rem 5rem}
+.cta-title{font-family:var(--serif);font-size:clamp(1.4rem,4vw,1.8rem);color:var(--indigo);margin-bottom:.6rem}
+.cta-title em{color:var(--mint-dark);font-style:italic}
+.cta-sub{font-size:.9rem;color:var(--gray400);margin-bottom:1.8rem}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:16px 36px;background:var(--mint-dark);color:var(--white);font-family:var(--font);font-size:.95rem;font-weight:600;border:none;border-radius:50px;cursor:pointer;text-decoration:none;transition:all .3s;box-shadow:0 4px 20px rgba(58,184,154,.3)}
+.cta-btn:hover{background:var(--mint);transform:translateY(-2px);box-shadow:0 6px 28px rgba(58,184,154,.35)}
+.cta-btn svg{width:20px;height:20px}
+.cta-note{font-size:.75rem;color:var(--gray400);margin-top:1rem}
+
+/* ASESOR CARD */
+.asesor-card{display:flex;align-items:center;gap:14px;background:var(--indigo-soft);border:1px solid var(--gray200);border-radius:14px;padding:14px 18px;margin-bottom:1.5rem}
+.asesor-avatar{width:46px;height:46px;border-radius:50%;background:var(--indigo);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0}
+.asesor-info{text-align:left}
+.asesor-label{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray400)}
+.asesor-name{font-size:1.05rem;font-weight:700;color:var(--indigo);margin-top:2px}
+
+/* FOOTER */
+.footer{background:var(--indigo);color:rgba(255,255,255,.4);text-align:center;padding:1.5rem;font-size:.75rem}
+.footer a{color:var(--mint);text-decoration:none}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.22,.61,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* MOBILE */
+@media(max-width:500px){
+section{padding:3rem 1.25rem}
+.scenario-detail{margin-left:0}
+.compare-header div,.compare-row div{padding:10px 8px;font-size:.68rem}
+.compare-row div:first-child{font-size:.72rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+<img src="https://amicaencuentra.com/wp-content/uploads/2026/03/cropped-propiico-bolita-verdementa-3.png" alt="PROPII.CO" class="hero-logo">
+<div class="hero-tagline">Administración integral de inmuebles</div>
+<h1>Arriende su inmueble<br>sin <em>dolores de cabeza</em></h1>
+<p class="hero-sub">Nosotros nos encargamos de todo: conseguir arrendatario, cobrar, mantener y proteger su patrimonio. Usted solo recibe su plata cada mes.</p>
+<a href="#escenarios" class="hero-cta">Descubra cómo funciona ↓</a>
+<div class="hero-scroll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+</section>
+
+<!-- PAIN SCENARIOS -->
+<section class="scenarios" id="escenarios">
+<div class="section-inner">
+<div class="section-label reveal">¿Le suena familiar?</div>
+<div class="section-title reveal">Los dolores de cabeza que ya no tiene por qué aguantar</div>
+<div class="section-desc reveal">Estas son situaciones reales que viven propietarios todos los días. Con PROPII.CO, ninguna de estas es su problema.</div>
+
+<div class="scenario-card reveal" onclick="toggleScenario(this)">
+<div class="scenario-top">
+<div class="scenario-icon">📱</div>
+<div class="scenario-info">
+<div class="scenario-title">Está en una reunión y pierde la llamada del inquilino perfecto</div>
+<div class="scenario-hook">Ese número desconocido que dejó pasar... era su mejor prospecto.</div>
+</div>
+<svg class="scenario-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="scenario-body"><div class="scenario-content"><div class="scenario-detail">
+<div class="scenario-problem">Cuando usted arrienda solo, tiene que estar disponible 24/7 para atender llamadas de interesados. Pero la vida no para: reuniones, trabajo, compromisos. Cada llamada que no contesta puede ser el arrendatario ideal que se fue con otro.</div>
+<div class="scenario-solution"><strong>Con PROPII.CO:</strong> Nuestro equipo atiende todas las llamadas, filtra curiosos y solo le presenta candidatos con perfil financiero validado. Usted no pierde ni una oportunidad.</div>
+</div></div></div>
+</div>
+
+<div class="scenario-card reveal" onclick="toggleScenario(this)">
+<div class="scenario-top">
+<div class="scenario-icon">🏖️</div>
+<div class="scenario-info">
+<div class="scenario-title">Está de vacaciones y lo llaman porque se rompió un tubo</div>
+<div class="scenario-hook">Desde la playa, buscando plomeros a las 10pm.</div>
+</div>
+<svg class="scenario-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="scenario-body"><div class="scenario-content"><div class="scenario-detail">
+<div class="scenario-problem">El seguro de arrendamiento le da una "asistencia domiciliaria", pero en la práctica usted llama, le dan cita para 3 días después, y mientras tanto el arrendatario lo presiona a usted porque el agua sigue corriendo.</div>
+<div class="scenario-solution"><strong>Con PROPII.CO:</strong> Tenemos un equipo profesional que resuelve sin que usted se entere. Cuando llega el informe mensual, usted se entera de que hubo un daño, ya fue reparado, y no tuvo que hacer una sola llamada.</div>
+</div></div></div>
+</div>
+
+<div class="scenario-card reveal" onclick="toggleScenario(this)">
+<div class="scenario-top">
+<div class="scenario-icon">💸</div>
+<div class="scenario-info">
+<div class="scenario-title">El inquilino no pagó y usted tiene que poner abogado</div>
+<div class="scenario-hook">El seguro cubre el canon... después del papeleo y la espera.</div>
+</div>
+<svg class="scenario-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="scenario-body"><div class="scenario-content"><div class="scenario-detail">
+<div class="scenario-problem">Con un seguro de arrendamiento convencional, usted tiene que reportar el incumplimiento, presentar reclamación formal, esperar la evaluación del caso, y puede tardar semanas en ver la plata. Mientras tanto, usted dejó de recibir su ingreso.</div>
+<div class="scenario-solution"><strong>Con PROPII.CO:</strong> Si el inquilino no paga, usted igual recibe su canon mensual. Nosotros asumimos la gestión de cobro y el proceso jurídico si es necesario. Su flujo de caja no se interrumpe.</div>
+</div></div></div>
+</div>
+
+<div class="scenario-card reveal" onclick="toggleScenario(this)">
+<div class="scenario-top">
+<div class="scenario-icon">👻</div>
+<div class="scenario-info">
+<div class="scenario-title">20 llamadas de curiosos y ninguno arrienda</div>
+<div class="scenario-hook">Horas mostrando el inmueble a gente que "lo va a pensar".</div>
+</div>
+<svg class="scenario-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="scenario-body"><div class="scenario-content"><div class="scenario-detail">
+<div class="scenario-problem">Publica su inmueble y empiezan las llamadas: curiosos, personas sin capacidad de pago, gente que quiere negociar la mitad del canon. Cada visita le cuesta tiempo y energía, y al final nadie concreta.</div>
+<div class="scenario-solution"><strong>Con PROPII.CO:</strong> Cada persona que visita su inmueble ya pasó por un filtro financiero. Cero paseos, cero curiosos. Solo candidatos reales con capacidad de pago comprobada.</div>
+</div></div></div>
+</div>
+
+<div class="scenario-card reveal" onclick="toggleScenario(this)">
+<div class="scenario-top">
+<div class="scenario-icon">📋</div>
+<div class="scenario-info">
+<div class="scenario-title">Le entregaron el apartamento con daños y nadie responde</div>
+<div class="scenario-hook">El inventario estaba "a ojo" y ahora no hay cómo reclamar.</div>
+</div>
+<svg class="scenario-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+</div>
+<div class="scenario-body"><div class="scenario-content"><div class="scenario-detail">
+<div class="scenario-problem">MAPFRE y otras aseguradoras en Colombia excluyen explícitamente los daños causados y faltantes al inmueble. Si el arrendatario le daña las paredes, pisos o accesorios, la póliza no responde por eso.</div>
+<div class="scenario-solution"><strong>Con PROPII.CO:</strong> Hacemos inventario fotográfico detallado al inicio, el contrato incluye cláusulas de responsabilidad, y hay póliza que cubre daños. Si algo sale mal, hay respaldo real para su patrimonio.</div>
+</div></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- COMPARISON -->
+<section class="comparison">
+<div class="section-inner">
+<div class="section-label reveal">La diferencia es clara</div>
+<div class="section-title reveal">Seguro de arrendamiento vs. PROPII.CO</div>
+<div class="section-desc reveal">El seguro reacciona cuando hay un problema. Nosotros prevenimos que el problema exista.</div>
+
+<div class="compare-table reveal">
+<div class="compare-header">
+<div>Servicio</div>
+<div>Seguro tradicional</div>
+<div>PROPII.CO</div>
+</div>
+<div class="compare-row"><div>Buscar arrendatario</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Filtro financiero</div><div><span class="check">✓</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Contrato blindado</div><div><span class="check">✓</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Cobro mensual del canon</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Atender llamadas e interesados</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Reparaciones inmediatas</div><div class="partial">Cita 48-72h</div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Cobertura de daños al inmueble</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Canon garantizado si no pagan</div><div class="partial">Con reclamación</div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Informe mensual de gestión</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+<div class="compare-row"><div>Usted no hace nada</div><div><span class="cross">✕</span></div><div><span class="check">✓</span></div></div>
+</div>
+</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+<div class="section-inner">
+<div class="section-label reveal">Así de simple</div>
+<div class="section-title reveal">¿Cómo funciona?</div>
+<div class="section-desc reveal">En 4 pasos, su inmueble pasa de ser una preocupación a ser solo un ingreso mensual.</div>
+
+<div class="step-list">
+<div class="step-item reveal">
+<div class="step-num">1</div>
+<div class="step-content">
+<div class="step-title">Nos conocemos</div>
+<div class="step-desc">Visitamos su inmueble, le explicamos el servicio y le damos una valoración del canon ideal para su zona. Sin compromiso.</div>
+</div>
+</div>
+<div class="step-item reveal">
+<div class="step-num">2</div>
+<div class="step-content">
+<div class="step-title">Activamos su inmueble</div>
+<div class="step-desc">Fotos profesionales, publicación en todos los portales y promoción activa para encontrar al arrendatario ideal lo más rápido posible.</div>
+</div>
+</div>
+<div class="step-item reveal">
+<div class="step-num">3</div>
+<div class="step-content">
+<div class="step-title">Seleccionamos al arrendatario</div>
+<div class="step-desc">Cada candidato pasa por un estudio financiero riguroso. Solo le presentamos personas con capacidad real de pago. Cero sorpresas.</div>
+</div>
+</div>
+<div class="step-item reveal">
+<div class="step-num">4</div>
+<div class="step-content">
+<div class="step-title">Usted solo recibe su plata</div>
+<div class="step-desc">Cobros, mantenimiento, reparaciones, temas legales... todo queda en nuestras manos. Cada mes recibe su informe de gestión y su canon puntual.</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+<div class="section-inner">
+<div class="section-label reveal">Inversión</div>
+<div class="section-title reveal">Todo esto por el 10% mensual del canon</div>
+<div class="section-desc reveal">Si su canon es de $1.500.000, son $150.000/mes. Eso es lo que cuesta no preocuparse por nada.</div>
+
+<div class="price-card reveal">
+<div class="price-amount">10%</div>
+<div class="price-label">mensual del canon de arrendamiento</div>
+<div class="price-includes">
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Promoción en todos los portales principales</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Estudio financiero del arrendatario</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Contrato con blindaje jurídico</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Póliza de seguro (canon + daños)</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Cobro y transferencia mensual puntual</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Gestión de reparaciones y mantenimiento</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Informe mensual de gestión de su inmueble</div>
+<div class="price-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Acompañamiento y soporte permanente</div>
+</div>
+<div class="price-note">Contrato de administración por 1 año. Al finalizar, usted decide si continúa con nosotros o lo maneja por su cuenta. Sin ataduras.</div>
+</div>
+</div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guarantee">
+<div class="section-inner">
+<div class="guarantee-badge reveal">🤝</div>
+<div class="section-title reveal" style="text-align:center">Sabemos que va a querer quedarse</div>
+<p class="guarantee-text reveal">Una vez finalice el año con nosotros, usted va a querer seguir con nuestra asistencia. No porque tenga que hacerlo, sino porque <strong>va a sentir la diferencia de vivir sin preocupaciones</strong>. Y si decide manejarlo solo, le entregamos todo en orden para que continúe tranquilo.</p>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+<div class="section-inner">
+<div class="asesor-card reveal" id="asesorCard" style="display:none">
+<div class="asesor-avatar" id="asesorAvatar">C</div>
+<div class="asesor-info">
+<div class="asesor-label">Su asesor(a) PROPII.CO</div>
+<div class="asesor-name" id="asesorName"></div>
+</div>
+</div>
+<div class="cta-title reveal"><em>Vive ligero,</em> Vive Propii!</div>
+<div class="cta-sub reveal">Agende una visita sin compromiso y conozca cómo funciona todo en persona.</div>
+<a href="https://wa.me/" id="waBtn" class="cta-btn reveal"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.386 0-4.592-.82-6.338-2.192l-.442-.362-3.262 1.093 1.093-3.262-.362-.442A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg><span id="waBtnText">Escríbanos por WhatsApp</span></a>
+<div class="cta-note reveal">Sin compromiso. Es solo para que conozca cómo trabajamos.</div>
+</div>
+</section>
+
+<footer class="footer">
+<p>PROPII.CO — Administración integral de inmuebles en arriendo</p>
+<p style="margin-top:4px"><a href="https://www.propii.co">www.propii.co</a></p>
+</footer>
+
+<script>
+// Personalization from URL params
+const params=new URLSearchParams(window.location.search);
+const nombre=params.get('nombre');
+const tel=params.get('tel');
+
+if(nombre){
+const card=document.getElementById('asesorCard');
+card.style.display='flex';
+document.getElementById('asesorName').textContent=nombre;
+document.getElementById('asesorAvatar').textContent=nombre.charAt(0).toUpperCase();
+document.getElementById('waBtnText').textContent='Escribirle a '+nombre;
+}
+
+if(tel){
+const msg=encodeURIComponent('Hola'+(nombre?' '+nombre:'')+', vi la propuesta de PROPII.CO y me gustaría saber más sobre el servicio de administración para mi inmueble.');
+document.getElementById('waBtn').href='https://wa.me/'+tel+'?text='+msg;
+}
+
+function toggleScenario(card){
+const wasOpen=card.classList.contains('open');
+document.querySelectorAll('.scenario-card').forEach(c=>c.classList.remove('open'));
+if(!wasOpen)card.classList.add('open');
+}
+
+// Scroll reveal
+const observer=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add('visible');
+}
+});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
